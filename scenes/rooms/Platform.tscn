@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4n8k9v2x7m1s"]
+
+[ext_resource type="Script" path="res://scripts/core/Platform.gd" id="1_3k7yf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(200, 32)
+
+[node name="Platform" type="StaticBody2D"]
+collision_layer = 4
+script = ExtResource("1_3k7yf")
+
+[node name="Sprite" type="ColorRect" parent="."]
+offset_left = -100.0
+offset_top = -16.0
+offset_right = 100.0
+offset_bottom = 16.0
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")

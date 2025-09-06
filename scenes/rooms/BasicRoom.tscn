@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8m3n5r7x2k1v"]
+
+[ext_resource type="Script" path="res://scripts/core/Room.gd" id="1_9k4xz"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(1920, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(1920, 100)
+
+[node name="BasicRoom" type="Node2D"]
+script = ExtResource("1_9k4xz")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(200, 800)
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="Platforms"]
+position = Vector2(960, 1030)
+collision_layer = 4
+
+[node name="Sprite" type="ColorRect" parent="Platforms/Ground"]
+offset_left = -960.0
+offset_top = -50.0
+offset_right = 960.0
+offset_bottom = 50.0
+color = Color(0.5, 0.3, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground"]
+shape = SubResource("RectangleShape2D_2")
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="RoomBounds" type="Area2D" parent="."]
+position = Vector2(960, 540)
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBounds"]
+shape = SubResource("RectangleShape2D_1")
