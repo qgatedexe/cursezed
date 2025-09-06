@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Racer Pro - Global Championship</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <h1 class="game-title">
+                <i class="fas fa-flag-checkered"></i>
+                Typing Racer Pro
+            </h1>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span id="current-wpm">0</span> WPM
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bullseye"></i>
+                    <span id="current-accuracy">100</span>%
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-trophy"></i>
+                    Rank: <span id="current-rank">-</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <main class="game-main">
+            <!-- Race Track -->
+            <section class="race-track">
+                <div class="track-container">
+                    <div class="finish-line">
+                        <i class="fas fa-flag-checkered"></i>
+                        <span>FINISH</span>
+                    </div>
+                    <div class="race-lanes">
+                        <div class="lane player-lane">
+                            <div class="car player-car" id="player-car">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="lane-label">You</div>
+                        </div>
+                        <div class="lane ai-lane">
+                            <div class="car ai-car" id="ai-car-1">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="lane-label">Speed Demon</div>
+                        </div>
+                        <div class="lane ai-lane">
+                            <div class="car ai-car" id="ai-car-2">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="lane-label">Turbo Type</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Typing Area -->
+            <section class="typing-section">
+                <div class="text-display" id="text-display">
+                    <span class="text-content" id="text-content"></span>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="typing-input" placeholder="Click here and start typing..." autocomplete="off" spellcheck="false">
+                    <div class="input-stats">
+                        <span class="words-left">Words left: <span id="words-remaining">0</span></span>
+                        <span class="time-elapsed">Time: <span id="time-elapsed">0</span>s</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Power-ups -->
+            <section class="powerups-section">
+                <div class="powerup-item" id="speed-boost" title="Speed Boost (+20% WPM for 10s)">
+                    <i class="fas fa-bolt"></i>
+                    <span class="powerup-count">0</span>
+                </div>
+                <div class="powerup-item" id="accuracy-shield" title="Accuracy Shield (No penalties for 5s)">
+                    <i class="fas fa-shield-alt"></i>
+                    <span class="powerup-count">0</span>
+                </div>
+                <div class="powerup-item" id="time-freeze" title="Time Freeze (Pause opponents for 3s)">
+                    <i class="fas fa-snowflake"></i>
+                    <span class="powerup-count">0</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button class="btn btn-primary" id="start-race">
+                <i class="fas fa-play"></i>
+                Start Race
+            </button>
+            <button class="btn btn-secondary" id="reset-race">
+                <i class="fas fa-redo"></i>
+                Reset
+            </button>
+            <select id="difficulty-select" class="difficulty-selector">
+                <option value="easy">Easy Mode</option>
+                <option value="medium" selected>Medium Mode</option>
+                <option value="hard">Hard Mode</option>
+                <option value="expert">Expert Mode</option>
+                <option value="nightmare">Nightmare Mode</option>
+            </select>
+        </div>
+
+        <!-- Leaderboard -->
+        <aside class="leaderboard-panel" id="leaderboard-panel">
+            <h3>
+                <i class="fas fa-trophy"></i>
+                Global Leaderboard
+                <button class="toggle-leaderboard" id="toggle-leaderboard">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </h3>
+            <div class="leaderboard-content">
+                <div class="leaderboard-filters">
+                    <button class="filter-btn active" data-filter="daily">Daily</button>
+                    <button class="filter-btn" data-filter="weekly">Weekly</button>
+                    <button class="filter-btn" data-filter="alltime">All Time</button>
+                </div>
+                <div class="leaderboard-list" id="leaderboard-list">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Results Modal -->
+        <div class="modal-overlay" id="results-modal">
+            <div class="modal-content">
+                <h2>Race Complete!</h2>
+                <div class="results-stats">
+                    <div class="result-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>WPM: <span id="final-wpm">0</span></span>
+                    </div>
+                    <div class="result-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Accuracy: <span id="final-accuracy">0</span>%</span>
+                    </div>
+                    <div class="result-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Time: <span id="final-time">0</span>s</span>
+                    </div>
+                    <div class="result-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Position: <span id="final-position">1st</span></span>
+                    </div>
+                </div>
+                <div class="leaderboard-submission">
+                    <input type="text" id="player-name" placeholder="Enter your name for leaderboard" maxlength="20">
+                    <button class="btn btn-primary" id="submit-score">Submit Score</button>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="play-again">Play Again</button>
+                    <button class="btn btn-primary" id="close-modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Toast -->
+        <div class="achievement-toast" id="achievement-toast">
+            <div class="achievement-content">
+                <i class="fas fa-medal"></i>
+                <div class="achievement-text">
+                    <strong id="achievement-title">Achievement Unlocked!</strong>
+                    <span id="achievement-description">You're getting better!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
