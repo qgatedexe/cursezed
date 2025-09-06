@@ -15,7 +15,7 @@ var shake_duration: float = 0.0
 
 func _ready():
 	# Find and follow the player
-	set_as_current()
+	make_current()
 
 func set_target(new_target: Node2D):
 	"""Set the target to follow"""
