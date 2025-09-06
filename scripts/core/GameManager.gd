@@ -20,7 +20,7 @@ var player: Player
 
 @onready var room_generator: RoomGenerator = $RoomGenerator
 @onready var ui_manager: UIManager = $UIManager
-@onready var camera_controller: CameraController = get_node("../CameraController")
+@onready var camera_controller: Camera2D = get_node("../CameraController")
 
 func _ready():
 	# Connect signals
@@ -81,7 +81,7 @@ func _spawn_player():
 	player.current_health = player_current_health
 	
 	# Set camera to follow player
-	if camera_controller:
+	if camera_controller and camera_controller.has_method("set_target"):
 		camera_controller.set_target(player)
 
 func add_memory_fragments(amount: int):

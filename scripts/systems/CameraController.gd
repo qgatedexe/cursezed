@@ -1,5 +1,4 @@
 extends Camera2D
-class_name CameraController
 
 ## Camera controller that follows the player smoothly
 ## Provides smooth camera movement and optional screen shake
