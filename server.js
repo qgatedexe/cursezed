@@ -367,9 +367,12 @@ process.on('SIGTERM', () => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`🏁 Typing Racer Pro server running on port ${PORT}`);
+const HOST = process.env.HOST || '0.0.0.0';
+
+server.listen(PORT, HOST, () => {
+    console.log(`🏁 Typing Racer Pro server running on ${HOST}:${PORT}`);
     console.log(`🌐 Open http://localhost:${PORT} to play!`);
+    console.log(`🔗 Or try http://127.0.0.1:${PORT} if localhost doesn't work`);
     
     // Initialize some sample data if database is empty
     db.get('SELECT COUNT(*) as count FROM scores', (err, row) => {

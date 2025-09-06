@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Racer Pro - Offline Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Override some styles for offline version */
+        .leaderboard-panel {
+            display: none !important;
+        }
+        .game-main {
+            grid-template-columns: 1fr !important;
+        }
+        .offline-notice {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Offline Notice -->
+        <div class="offline-notice">
+            <i class="fas fa-info-circle"></i>
+            <strong>Offline Mode:</strong> Leaderboard features are disabled. Start the server for full functionality.
+        </div>
+
+        <!-- Header -->
+        <header class="game-header">
+            <h1 class="game-title">
+                <i class="fas fa-flag-checkered"></i>
+                Typing Racer Pro
+                <small style="font-size: 0.5em; color: #ffc107;">(Offline)</small>
+            </h1>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span id="current-wpm">0</span> WPM
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bullseye"></i>
+                    <span id="current-accuracy">100</span>%
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-trophy"></i>
+                    Rank: <span id="current-rank">-</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <main class="game-main">
+            <!-- Race Track -->
+            <section class="race-track">
+                <div class="track-container">
+                    <div class="finish-line">
+                        <i class="fas fa-flag-checkered"></i>
+                        <span>FINISH</span>
+                    </div>
+                    <div class="race-lanes">
+                        <div class="lane player-lane">
+                            <div class="car player-car" id="player-car">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="lane-label">You</div>
+                        </div>
+                        <div class="lane ai-lane">
+                            <div class="car ai-car" id="ai-car-1">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="lane-label">Speed Demon</div>
+                        </div>
+                        <div class="lane ai-lane">
+                            <div class="car ai-car" id="ai-car-2">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="lane-label">Turbo Type</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Typing Area -->
+            <section class="typing-section">
+                <div class="text-display" id="text-display">
+                    <span class="text-content" id="text-content"></span>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="typing-input" placeholder="Click here and start typing..." autocomplete="off" spellcheck="false">
+                    <div class="input-stats">
+                        <span class="words-left">Words left: <span id="words-remaining">0</span></span>
+                        <span class="time-elapsed">Time: <span id="time-elapsed">0</span>s</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Power-ups -->
+            <section class="powerups-section">
+                <div class="powerup-item" id="speed-boost" title="Speed Boost (+20% WPM for 10s)">
+                    <i class="fas fa-bolt"></i>
+                    <span class="powerup-count">0</span>
+                </div>
+                <div class="powerup-item" id="accuracy-shield" title="Accuracy Shield (No penalties for 5s)">
+                    <i class="fas fa-shield-alt"></i>
+                    <span class="powerup-count">0</span>
+                </div>
+                <div class="powerup-item" id="time-freeze" title="Time Freeze (Pause opponents for 3s)">
+                    <i class="fas fa-snowflake"></i>
+                    <span class="powerup-count">0</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button class="btn btn-primary" id="start-race">
+                <i class="fas fa-play"></i>
+                Start Race
+            </button>
+            <button class="btn btn-secondary" id="reset-race">
+                <i class="fas fa-redo"></i>
+                Reset
+            </button>
+            <select id="difficulty-select" class="difficulty-selector">
+                <option value="easy">Easy Mode</option>
+                <option value="medium" selected>Medium Mode</option>
+                <option value="hard">Hard Mode</option>
+                <option value="expert">Expert Mode</option>
+                <option value="nightmare">Nightmare Mode</option>
+            </select>
+        </div>
+
+        <!-- Results Modal -->
+        <div class="modal-overlay" id="results-modal">
+            <div class="modal-content">
+                <h2>Race Complete!</h2>
+                <div class="results-stats">
+                    <div class="result-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>WPM: <span id="final-wpm">0</span></span>
+                    </div>
+                    <div class="result-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Accuracy: <span id="final-accuracy">0</span>%</span>
+                    </div>
+                    <div class="result-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Time: <span id="final-time">0</span>s</span>
+                    </div>
+                    <div class="result-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Position: <span id="final-position">1st</span></span>
+                    </div>
+                </div>
+                <div class="offline-notice" style="margin: 20px 0;">
+                    <i class="fas fa-wifi-slash"></i>
+                    Leaderboard submission not available in offline mode
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="play-again">Play Again</button>
+                    <button class="btn btn-primary" id="close-modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Toast -->
+        <div class="achievement-toast" id="achievement-toast">
+            <div class="achievement-content">
+                <i class="fas fa-medal"></i>
+                <div class="achievement-text">
+                    <strong id="achievement-title">Achievement Unlocked!</strong>
+                    <span id="achievement-description">You're getting better!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script>
+        // Override socket functionality for offline mode
+        if (window.game) {
+            window.game.socket = null;
+            window.game.connectSocket = function() {
+                console.log('Offline mode: Socket connection disabled');
+            };
+        }
+        
+        // Add offline mode indicator
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎮 Typing Racer Pro - Offline Mode');
+            console.log('📡 For full features including leaderboard, start the server with: node server.js');
+        });
+    </script>
+</body>
+</html>
