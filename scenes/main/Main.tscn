@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxmyqv5wv8xd7"]
+
+[ext_resource type="Script" path="res://scripts/core/GameManager.gd" id="1_8k5hf"]
+[ext_resource type="Script" path="res://scripts/systems/RoomGenerator.gd" id="2_3n4xr"]
+[ext_resource type="PackedScene" uid="uid://c4yv4w6y8h3uw" path="res://scenes/ui/UI.tscn" id="3_s5p8n"]
+[ext_resource type="Script" path="res://scripts/systems/CameraController.gd" id="4_k8m2x"]
+
+[node name="Main" type="Node2D"]
+
+[node name="GameManager" type="Node" parent="." groups=["game_manager"]]
+script = ExtResource("1_8k5hf")
+
+[node name="RoomGenerator" type="Node" parent="GameManager"]
+script = ExtResource("2_3n4xr")
+
+[node name="UIManager" parent="GameManager" instance=ExtResource("3_s5p8n")]
+
+[node name="CameraController" type="Camera2D" parent="."]
+enabled = true
+zoom = Vector2(1, 1)
+script = ExtResource("4_k8m2x")

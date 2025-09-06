@@ -1,0 +1,88 @@
+[gd_scene load_steps=4 format=3 uid="uid://d8v5x1n2m4k7p"]
+
+[ext_resource type="Script" path="res://scripts/core/Room.gd" id="1_2k8vx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(1920, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(1920, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3"]
+size = Vector2(200, 32)
+
+[node name="AshenRoom1" type="Node2D"]
+script = ExtResource("1_2k8vx")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(200, 800)
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="Platforms"]
+position = Vector2(960, 1030)
+collision_layer = 4
+
+[node name="Sprite" type="ColorRect" parent="Platforms/Ground"]
+offset_left = -960.0
+offset_top = -50.0
+offset_right = 960.0
+offset_bottom = 50.0
+color = Color(0.3, 0.3, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground"]
+shape = SubResource("RectangleShape2D_2")
+
+[node name="Platform1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(400, 800)
+collision_layer = 4
+
+[node name="Sprite" type="ColorRect" parent="Platforms/Platform1"]
+offset_left = -100.0
+offset_top = -16.0
+offset_right = 100.0
+offset_bottom = 16.0
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform1"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="Platform2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(800, 600)
+collision_layer = 4
+
+[node name="Sprite" type="ColorRect" parent="Platforms/Platform2"]
+offset_left = -100.0
+offset_top = -16.0
+offset_right = 100.0
+offset_bottom = 16.0
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform2"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="Platform3" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1200, 400)
+collision_layer = 4
+
+[node name="Sprite" type="ColorRect" parent="Platforms/Platform3"]
+offset_left = -100.0
+offset_top = -16.0
+offset_right = 100.0
+offset_bottom = 16.0
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform3"]
+shape = SubResource("RectangleShape2D_3")
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="RoomBounds" type="Area2D" parent="."]
+position = Vector2(960, 540)
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBounds"]
+shape = SubResource("RectangleShape2D_1")

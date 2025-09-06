@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://cg8x4fh5t1p3r"]
+
+[ext_resource type="Script" path="res://scripts/core/DreamBolt.gd" id="1_4k8yj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(16, 8)
+
+[node name="DreamBolt" type="Area2D"]
+collision_layer = 8
+collision_mask = 6
+script = ExtResource("1_4k8yj")
+
+[node name="Sprite" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 8.0
+offset_bottom = 4.0
+color = Color(1, 0, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
