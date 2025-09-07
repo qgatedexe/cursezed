@@ -14,10 +14,11 @@ class_name ParallaxController
 var layer_configs: Array[Dictionary] = []
 var original_motion_scales: Array[Vector2] = []
 
-@onready var camera: Camera2D = get_viewport().get_camera_2d()
+var camera: Camera2D
 
 func _ready():
 	_initialize_layers()
+	camera = get_viewport().get_camera_2d()
 	
 func _process(delta):
 	if auto_scroll:
@@ -184,9 +185,11 @@ func _update_player_influence():
 	if not camera:
 		return
 		
+	# Get player movement instead of camera velocity
+	var player = get_tree().get_first_node_in_group("player")
 	var camera_velocity = Vector2.ZERO
-	if camera.has_method("get_velocity"):
-		camera_velocity = camera.get_velocity() * player_influence
+	if player:
+		camera_velocity = player.velocity * player_influence
 	
 	for config in layer_configs:
 		var layer = config.layer

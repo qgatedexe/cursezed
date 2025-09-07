@@ -24,8 +24,8 @@ func _setup_biome_system_example():
 	_show_biome_progress()
 	
 	# Example of triggering biome events
-	await get_tree().create_timer(2.0).timeout
-	_demonstrate_biome_features()
+	var demo_timer = get_tree().create_timer(2.0)
+	demo_timer.timeout.connect(_demonstrate_biome_features)
 
 func _on_biome_changed(new_biome: String):
 	"""Handle biome change events"""

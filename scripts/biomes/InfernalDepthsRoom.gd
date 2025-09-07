@@ -370,8 +370,8 @@ func _collapse_platform(platform_data: Dictionary):
 	_create_platform_collapse_effect(platform_data)
 	
 	# Schedule respawn after some time
-	await get_tree().create_timer(15.0).timeout
-	_respawn_platform(platform_data)
+	var respawn_timer = get_tree().create_timer(15.0)
+	respawn_timer.timeout.connect(_respawn_platform.bind(platform_data))
 
 func _create_platform_collapse_effect(platform_data: Dictionary):
 	"""Create visual effects for platform collapse"""
@@ -539,10 +539,8 @@ func _create_smoke_texture() -> ImageTexture:
 
 func trigger_eruption():
 	"""Special effect: massive eruption with multiple bursts"""
-	# Trigger multiple simultaneous bursts
-	for pos in burst_locations:
-		_create_magma_burst(pos)
-		await get_tree().create_timer(0.2).timeout
+	# Trigger multiple simultaneous bursts with delays
+	_trigger_burst_sequence(0)
 	
 	# Intensify all particle effects temporarily
 	var original_ember_amount = ember_particles.amount
@@ -552,7 +550,22 @@ func trigger_eruption():
 	smoke_particles.amount = original_smoke_amount * 2
 	
 	# Restore after eruption
-	await get_tree().create_timer(8.0).timeout
+	var restore_timer = get_tree().create_timer(8.0)
+	restore_timer.timeout.connect(_restore_after_eruption.bind(original_ember_amount, original_smoke_amount))
+
+func _trigger_burst_sequence(index: int):
+	"""Trigger burst sequence with delays"""
+	if index >= burst_locations.size():
+		return
+		
+	_create_magma_burst(burst_locations[index])
+	
+	if index < burst_locations.size() - 1:
+		var delay_timer = get_tree().create_timer(0.2)
+		delay_timer.timeout.connect(_trigger_burst_sequence.bind(index + 1))
+
+func _restore_after_eruption(original_ember_amount: int, original_smoke_amount: int):
+	"""Restore particle amounts after eruption"""
 	ember_particles.amount = original_ember_amount
 	smoke_particles.amount = original_smoke_amount
 

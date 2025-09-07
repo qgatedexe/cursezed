@@ -354,8 +354,11 @@ func trigger_sandstorm():
 			_hide_mirage(mirage_data)
 	
 	# Restore after storm
-	await get_tree().create_timer(8.0).timeout
-	
+	var restore_timer = get_tree().create_timer(8.0)
+	restore_timer.timeout.connect(_restore_after_sandstorm.bind(original_amount, original_velocity))
+
+func _restore_after_sandstorm(original_amount: int, original_velocity: float):
+	"""Restore normal conditions after sandstorm"""
 	dust_particles.amount = original_amount
 	(dust_particles.process_material as ParticleProcessMaterial).initial_velocity_max = original_velocity
 	

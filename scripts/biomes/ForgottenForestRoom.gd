@@ -330,15 +330,15 @@ func _trigger_spore_burst():
 	if spores_particles:
 		var original_amount = spores_particles.amount
 		spores_particles.amount = original_amount * 3
-		await get_tree().create_timer(2.0).timeout
-		spores_particles.amount = original_amount
+		var timer = get_tree().create_timer(2.0)
+		timer.timeout.connect(func(): spores_particles.amount = original_amount)
 
 func _trigger_wind_gust():
 	"""Strong wind effect through parallax"""
 	if parallax_bg:
 		parallax_bg.set_wind(Vector2(1.5, -0.3), 150.0)
-		await get_tree().create_timer(3.0).timeout
-		parallax_bg.set_wind(Vector2(1.0, -0.2), 30.0)
+		var timer = get_tree().create_timer(3.0)
+		timer.timeout.connect(func(): parallax_bg.set_wind(Vector2(1.0, -0.2), 30.0))
 
 func _trigger_light_pulse():
 	"""Bright light pulse effect"""

@@ -48,6 +48,9 @@ var dream_bolt_scene = preload("res://scenes/player/DreamBolt.tscn")
 func _ready():
 	current_health = max_health
 	
+	# Add to player group
+	add_to_group("player")
+	
 	# Setup melee area
 	melee_area.body_entered.connect(_on_melee_area_entered)
 	

@@ -300,8 +300,11 @@ func _trigger_floor_collapse(collapse_data: Dictionary):
 	_show_collapse_warning(collapse_data)
 	
 	# Wait for collapse delay
-	await get_tree().create_timer(collapse_delay).timeout
-	
+	var collapse_timer = get_tree().create_timer(collapse_delay)
+	collapse_timer.timeout.connect(_execute_collapse.bind(collapse_data))
+
+func _execute_collapse(collapse_data: Dictionary):
+	"""Execute the collapse after delay"""
 	# Remove tiles
 	_remove_collapse_tiles(collapse_data)
 	
@@ -309,8 +312,8 @@ func _trigger_floor_collapse(collapse_data: Dictionary):
 	_add_collapse_effects(collapse_data)
 	
 	# Schedule respawn
-	await get_tree().create_timer(respawn_time).timeout
-	_respawn_collapse_tiles(collapse_data)
+	var respawn_timer = get_tree().create_timer(respawn_time)
+	respawn_timer.timeout.connect(_respawn_collapse_tiles.bind(collapse_data))
 
 func _show_collapse_warning(collapse_data: Dictionary):
 	"""Show visual warning before collapse"""
@@ -342,8 +345,8 @@ func _show_collapse_warning(collapse_data: Dictionary):
 	warning_particles.emitting = true
 	
 	# Remove after collapse
-	await get_tree().create_timer(collapse_delay + 0.5).timeout
-	warning_particles.queue_free()
+	var cleanup_timer = get_tree().create_timer(collapse_delay + 0.5)
+	cleanup_timer.timeout.connect(warning_particles.queue_free)
 
 func _remove_collapse_tiles(collapse_data: Dictionary):
 	"""Remove tiles in collapse area"""
@@ -427,8 +430,8 @@ func trigger_ash_storm():
 	if ash_particles:
 		var original_amount = ash_particles.amount
 		ash_particles.amount = original_amount * 2
-		await get_tree().create_timer(5.0).timeout
-		ash_particles.amount = original_amount
+		var timer = get_tree().create_timer(5.0)
+		timer.timeout.connect(func(): ash_particles.amount = original_amount)
 
 func set_industrial_atmosphere(intensity: float):
 	"""Adjust overall industrial atmosphere intensity"""

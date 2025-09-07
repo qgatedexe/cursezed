@@ -125,12 +125,16 @@ func _activate_particle(particle: GPUParticles2D, particle_type: String, positio
 	# Move to active list
 	active_particles[particle_type].append(particle)
 	
-	# Auto-return to pool after lifetime
+	# Auto-return to pool after lifetime (using timer instead of await)
 	var lifetime = particle.lifetime
-	await get_tree().create_timer(lifetime + 1.0).timeout
-	return_particle_system(particle, particle_type)
+	var timer = get_tree().create_timer(lifetime + 1.0)
+	timer.timeout.connect(_return_particle_delayed.bind(particle, particle_type))
 	
 	return particle
+
+func _return_particle_delayed(particle: GPUParticles2D, particle_type: String):
+	"""Return particle to pool after delay"""
+	return_particle_system(particle, particle_type)
 
 func return_particle_system(particle: GPUParticles2D, particle_type: String):
 	"""Return a particle system to the pool"""
