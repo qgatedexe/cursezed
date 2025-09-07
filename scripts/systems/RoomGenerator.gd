@@ -17,6 +17,36 @@ var room_templates: Dictionary = {
 		"res://scenes/rooms/AshenRoom1.tscn",
 		"res://scenes/rooms/AshenRoom2.tscn", 
 		"res://scenes/rooms/AshenRoom3.tscn"
+	],
+	"Forgotten Forest": [
+		"res://scenes/biomes/forgotten_forest/ForestRoom1.tscn",
+		"res://scenes/biomes/forgotten_forest/ForestRoom2.tscn",
+		"res://scenes/biomes/forgotten_forest/ForestRoom3.tscn"
+	],
+	"Ruined City": [
+		"res://scenes/biomes/ruined_city/CityRoom1.tscn",
+		"res://scenes/biomes/ruined_city/CityRoom2.tscn",
+		"res://scenes/biomes/ruined_city/CityRoom3.tscn"
+	],
+	"Drowned Cathedrals": [
+		"res://scenes/biomes/drowned_cathedrals/CathedralRoom1.tscn",
+		"res://scenes/biomes/drowned_cathedrals/CathedralRoom2.tscn",
+		"res://scenes/biomes/drowned_cathedrals/CathedralRoom3.tscn"
+	],
+	"Endless Roads": [
+		"res://scenes/biomes/endless_roads/DesertRoom1.tscn",
+		"res://scenes/biomes/endless_roads/DesertRoom2.tscn",
+		"res://scenes/biomes/endless_roads/DesertRoom3.tscn"
+	],
+	"Infernal Depths": [
+		"res://scenes/biomes/infernal_depths/InfernalRoom1.tscn",
+		"res://scenes/biomes/infernal_depths/InfernalRoom2.tscn",
+		"res://scenes/biomes/infernal_depths/InfernalRoom3.tscn"
+	],
+	"Reverie's Heart": [
+		"res://scenes/biomes/reverie_heart/HeartRoom1.tscn",
+		"res://scenes/biomes/reverie_heart/HeartRoom2.tscn",
+		"res://scenes/biomes/reverie_heart/BossArena.tscn"
 	]
 }
 
