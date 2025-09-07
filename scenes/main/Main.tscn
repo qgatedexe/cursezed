@@ -1,11 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxmyqv5wv8xd7"]
+[gd_scene load_steps=7 format=3 uid="uid://bxmyqv5wv8xd7"]
 
 [ext_resource type="Script" path="res://scripts/core/GameManager.gd" id="1_8k5hf"]
 [ext_resource type="Script" path="res://scripts/systems/RoomGenerator.gd" id="2_3n4xr"]
-[ext_resource type="PackedScene" uid="uid://c4yv4w6y8h3uw" path="res://scenes/ui/UI.tscn" id="3_s5p8n"]
+[ext_resource type="PackedScene" uid="uid://c9x5m4k2v8n1p" path="res://scenes/ui/AdvancedHUD.tscn" id="3_s5p8n"]
 [ext_resource type="Script" path="res://scripts/systems/CameraController.gd" id="4_k8m2x"]
+[ext_resource type="PackedScene" uid="uid://b8k4v2n1x7m9s" path="res://scenes/ui/MainMenu.tscn" id="5_m8kx"]
+[ext_resource type="Script" path="res://scripts/systems/MainGameController.gd" id="6_n9ky"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("6_n9ky")
+
+[node name="MainMenu" parent="." instance=ExtResource("5_m8kx")]
 
 [node name="GameManager" type="Node" parent="." groups=["game_manager"]]
 script = ExtResource("1_8k5hf")

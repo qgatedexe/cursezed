@@ -19,8 +19,9 @@ var current_room: Room
 var player: Player
 
 @onready var room_generator: RoomGenerator = $RoomGenerator
-@onready var ui_manager: UIManager = $UIManager
+@onready var ui_manager: AdvancedHUD = $UIManager
 @onready var camera_controller: Camera2D = get_node("../CameraController")
+@onready var main_menu: MainMenu = get_node("../MainMenu")
 
 func _ready():
 	# Connect signals
@@ -121,3 +122,31 @@ func get_player_position() -> Vector2:
 	if player:
 		return player.global_position
 	return Vector2.ZERO
+
+func _on_level_door_activated(next_level_name: String):
+	"""Handle level door activation"""
+	print("Advancing to: ", next_level_name)
+	
+	# Update biome based on next level
+	var biome_map = {
+		"Luminous Abyss": "Luminous Abyss",
+		"Whispering Halls": "Whispering Halls",
+		"Oblivion Root": "Oblivion Root",
+		"The Final Dream": "The Final Dream"
+	}
+	
+	starting_biome = biome_map.get(next_level_name, starting_biome)
+	current_level += 1
+	
+	# Generate new level
+	_generate_level()
+
+func show_main_menu():
+	"""Show the main menu"""
+	if main_menu:
+		main_menu.show_menu()
+
+func hide_main_menu():
+	"""Hide the main menu"""
+	if main_menu:
+		main_menu.hide_menu()

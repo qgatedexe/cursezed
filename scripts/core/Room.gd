@@ -83,13 +83,11 @@ func _on_enemy_died(enemy: Enemy):
 	"""Handle enemy death"""
 	enemies.erase(enemy)
 	
-	# Spawn memory fragment where enemy died
-	add_pickup(enemy.global_position, "memory_fragment")
-	
 	# Check if room is cleared
 	if enemies.is_empty() and not is_cleared:
 		is_cleared = true
 		room_cleared.emit()
+		_spawn_level_door()
 		print("Room cleared: ", room_id)
 
 func get_enemy_count() -> int:
@@ -111,3 +109,30 @@ func _setup_default_enemies():
 		var pos_x = randf_range(300, 1600)
 		var pos_y = randf_range(200, 900)
 		add_enemy(Vector2(pos_x, pos_y), "basic")
+
+func _spawn_level_door():
+	"""Spawn the level door when room is cleared"""
+	var door_scene = preload("res://scenes/rooms/LevelDoor.tscn")
+	var door = door_scene.instantiate()
+	
+	# Position door at the right side of the room
+	door.global_position = Vector2(1700, 900)
+	
+	# Set next level name based on current biome
+	var next_levels = {
+		"Ashen Courtyard": "Luminous Abyss",
+		"Luminous Abyss": "Whispering Halls", 
+		"Whispering Halls": "Oblivion Root",
+		"Oblivion Root": "The Final Dream"
+	}
+	
+	var next_level = next_levels.get(biome, "Unknown Realm")
+	door.set_next_level(next_level)
+	
+	add_child(door)
+	door.appear_when_room_cleared()
+	
+	# Connect door signal to game manager
+	var game_manager = get_tree().get_first_node_in_group("game_manager")
+	if game_manager:
+		door.door_activated.connect(game_manager._on_level_door_activated)

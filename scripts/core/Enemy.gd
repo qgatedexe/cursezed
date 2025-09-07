@@ -6,6 +6,7 @@ class_name Enemy
 
 signal died(enemy: Enemy)
 signal player_detected(player: Player)
+signal health_changed(new_health: int)
 
 @export var enemy_type: String = "basic"
 @export var max_health: int = 50
@@ -14,9 +15,14 @@ signal player_detected(player: Player)
 @export var detection_range: float = 300.0
 @export var attack_range: float = 60.0
 @export var patrol_distance: float = 200.0
+@export var fragment_drop_chance: float = 0.7  # 70% chance to drop fragment
+@export var can_dash: bool = true
+@export var dash_speed: float = 400.0
+@export var dash_duration: float = 0.3
+@export var dash_cooldown: float = 5.0
 
 # AI States
-enum AIState { PATROL, CHASE, ATTACK, STUNNED }
+enum AIState { PATROL, CHASE, ATTACK, STUNNED, DASHING }
 var current_state: AIState = AIState.PATROL
 
 # State variables
@@ -26,10 +32,19 @@ var patrol_origin: Vector2
 var patrol_direction: int = 1
 var last_player_position: Vector2
 
+# Dash variables
+var is_dashing: bool = false
+var dash_timer: float = 0.0
+var dash_cooldown_timer: float = 0.0
+var dash_direction: Vector2 = Vector2.ZERO
+
 # Timers
 var attack_cooldown: float = 1.5
 var attack_timer: float = 0.0
 var stun_timer: float = 0.0
+
+# Health bar reference
+var health_bar: EnemyHealthBar
 
 # References
 @onready var sprite: ColorRect = $Sprite
@@ -54,6 +69,9 @@ func _ready():
 	# Setup attack area
 	if attack_area:
 		attack_area.body_entered.connect(_on_attack_area_entered)
+	
+	# Create health bar
+	_create_health_bar()
 
 func _physics_process(delta):
 	_update_timers(delta)
@@ -71,6 +89,15 @@ func _update_timers(delta):
 		stun_timer -= delta
 		if stun_timer <= 0:
 			current_state = AIState.PATROL
+	
+	if dash_timer > 0:
+		dash_timer -= delta
+		if dash_timer <= 0:
+			is_dashing = false
+			current_state = AIState.CHASE
+	
+	if dash_cooldown_timer > 0:
+		dash_cooldown_timer -= delta
 
 func _handle_ai_state(delta):
 	"""Handle AI behavior based on current state"""
@@ -83,6 +110,8 @@ func _handle_ai_state(delta):
 			_handle_attack_state(delta)
 		AIState.STUNNED:
 			_handle_stunned_state(delta)
+		AIState.DASHING:
+			_handle_dash_state(delta)
 
 func _handle_patrol_state(delta):
 	"""Handle patrol behavior"""
@@ -103,6 +132,13 @@ func _handle_chase_state(delta):
 		current_state = AIState.PATROL
 		return
 	
+	var distance = global_position.distance_to(player_target.global_position)
+	
+	# Try to dash if player is far enough and dash is available
+	if can_dash and dash_cooldown_timer <= 0 and distance > 150 and distance < 400:
+		_perform_dash()
+		return
+	
 	# Move towards player
 	var direction = sign(player_target.global_position.x - global_position.x)
 	velocity.x = direction * speed
@@ -111,7 +147,6 @@ func _handle_chase_state(delta):
 	sprite.scale.x = direction if direction != 0 else sprite.scale.x
 	
 	# Check if player is in attack range
-	var distance = global_position.distance_to(player_target.global_position)
 	if distance <= attack_range and attack_timer <= 0:
 		current_state = AIState.ATTACK
 
@@ -127,10 +162,6 @@ func _handle_attack_state(delta):
 	await get_tree().create_timer(0.5).timeout
 	if current_state == AIState.ATTACK:
 		current_state = AIState.CHASE
-
-func _handle_stunned_state(delta):
-	"""Handle stunned state (brief pause after taking damage)"""
-	velocity.x = 0
 
 func _handle_gravity(delta):
 	"""Apply gravity"""
@@ -170,6 +201,7 @@ func _on_attack_area_entered(body):
 func take_damage(amount: int):
 	"""Take damage and handle health changes"""
 	current_health = max(0, current_health - amount)
+	health_changed.emit(current_health)
 	
 	# Brief stun when taking damage
 	current_state = AIState.STUNNED
@@ -190,5 +222,55 @@ func _damage_feedback():
 func die():
 	"""Handle enemy death"""
 	print(enemy_type, " enemy died")
+	
+	# Random chance to drop memory fragment
+	if randf() < fragment_drop_chance:
+		_drop_memory_fragment()
+	
 	died.emit(self)
 	queue_free()
+
+func _create_health_bar():
+	"""Create health bar for this enemy"""
+	var health_bar_scene = preload("res://scenes/enemies/EnemyHealthBar.tscn")
+	health_bar = health_bar_scene.instantiate()
+	get_tree().current_scene.add_child(health_bar)
+	health_bar.setup_for_enemy(self)
+
+func _drop_memory_fragment():
+	"""Drop a memory fragment at enemy position"""
+	var fragment_scene = preload("res://scenes/pickups/MemoryFragment.tscn")
+	var fragment = fragment_scene.instantiate()
+	fragment.global_position = global_position
+	get_tree().current_scene.add_child(fragment)
+
+func _perform_dash():
+	"""Perform dash attack towards player"""
+	if not player_target or dash_cooldown_timer > 0:
+		return
+	
+	# Calculate dash direction
+	dash_direction = (player_target.global_position - global_position).normalized()
+	
+	# Start dash
+	is_dashing = true
+	current_state = AIState.DASHING
+	dash_timer = dash_duration
+	dash_cooldown_timer = dash_cooldown
+	
+	# Visual effect - change color during dash
+	sprite.modulate = Color.YELLOW
+	
+	print(enemy_type, " enemy dashes!")
+
+func _handle_dash_state(delta):
+	"""Handle dash movement"""
+	velocity.x = dash_direction.x * dash_speed
+	
+	# Return to normal color when dash ends
+	if dash_timer <= 0:
+		sprite.modulate = Color.RED
+
+func _handle_stunned_state(delta):
+	"""Handle stunned state (brief pause after taking damage)"""
+	velocity.x = 0
