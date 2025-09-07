@@ -100,7 +100,7 @@ func _setup_ember_particles():
 	material.color_ramp = gradient_texture
 	
 	# Multiple emission points near lava
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(1200, 100, 0)
 	
 	ember_particles.process_material = material

@@ -15,7 +15,7 @@ var current_level: int = 1
 var memory_fragments: int = 0
 var player_max_health: int = 100
 var player_current_health: int = 100
-var current_room: Room
+var current_room: Node2D
 var player: Player
 
 @onready var room_generator: RoomGenerator = $RoomGenerator

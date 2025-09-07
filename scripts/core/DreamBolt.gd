@@ -23,8 +23,8 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 	
 	# Auto-destroy after lifetime
-	await get_tree().create_timer(lifetime).timeout
-	queue_free()
+	var timer = get_tree().create_timer(lifetime)
+	timer.timeout.connect(queue_free)
 
 func _physics_process(delta):
 	# Move in direction

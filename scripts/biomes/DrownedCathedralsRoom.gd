@@ -86,7 +86,7 @@ func _setup_bubble_particles():
 	material.color_ramp = gradient_texture
 	
 	# Emission from underwater areas
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(800, 50, 0)
 	
 	bubbles_particles.process_material = material
@@ -129,7 +129,7 @@ func _setup_drift_particles():
 	material.color_ramp = gradient_texture
 	
 	# Wide emission area
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(1200, 400, 0)
 	
 	drift_particles.process_material = material

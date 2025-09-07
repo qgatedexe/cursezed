@@ -124,7 +124,11 @@ func _handle_attack_state(delta):
 		attack_timer = attack_cooldown
 	
 	# Return to chase after attack
-	await get_tree().create_timer(0.5).timeout
+	var timer = get_tree().create_timer(0.5)
+	timer.timeout.connect(_return_to_chase_after_attack)
+
+func _return_to_chase_after_attack():
+	"""Return to chase state after attack"""
 	if current_state == AIState.ATTACK:
 		current_state = AIState.CHASE
 
@@ -155,10 +159,14 @@ func _on_detection_area_exited(body):
 	"""Handle player leaving detection range"""
 	if body is Player and body == player_target:
 		# Don't immediately lose target - keep chasing for a bit
-		await get_tree().create_timer(2.0).timeout
-		if current_state == AIState.CHASE:
-			player_target = null
-			current_state = AIState.PATROL
+		var timer = get_tree().create_timer(2.0)
+		timer.timeout.connect(_lose_player_target)
+
+func _lose_player_target():
+	"""Lose player target after delay"""
+	if current_state == AIState.CHASE:
+		player_target = null
+		current_state = AIState.PATROL
 
 func _on_attack_area_entered(body):
 	"""Handle contact damage to player"""
@@ -184,8 +192,8 @@ func take_damage(amount: int):
 func _damage_feedback():
 	"""Provide visual feedback when taking damage"""
 	sprite.modulate = Color.WHITE
-	await get_tree().create_timer(0.1).timeout
-	sprite.modulate = Color.RED
+	var timer = get_tree().create_timer(0.1)
+	timer.timeout.connect(func(): sprite.modulate = Color.RED)
 
 func die():
 	"""Handle enemy death"""

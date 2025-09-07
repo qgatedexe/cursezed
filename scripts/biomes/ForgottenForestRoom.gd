@@ -94,7 +94,7 @@ func _setup_spore_particles():
 	material.color_ramp = gradient_texture
 	
 	# Emission
-	material.emission = Emission.EMISSION_SPHERE
+	material.emission = ParticleProcessMaterial.EMISSION_SPHERE
 	var emission_box = material as ParticleProcessMaterial
 	material.emission_box_extents = Vector3(960, 50, 0)  # Screen width
 	
@@ -141,7 +141,7 @@ func _setup_leaf_particles():
 	material.color_ramp = gradient_texture
 	
 	# Emission
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(1500, 100, 0)
 	
 	leaf_particles.process_material = material

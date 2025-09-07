@@ -4,7 +4,7 @@ class_name RoomGenerator
 ## Procedural room generation system for Ashes of Reverie
 ## Generates connected rooms with different layouts and enemy placements
 
-signal room_generated(room: Room)
+signal room_generated(room: Node2D)
 
 @export var room_width: int = 1920
 @export var room_height: int = 1080
@@ -51,7 +51,7 @@ var room_templates: Dictionary = {
 }
 
 var current_biome: String
-var generated_rooms: Array[Room] = []
+var generated_rooms: Array[Node2D] = []
 
 func generate_level(biome: String, level: int) -> Dictionary:
 	"""Generate a complete level with connected rooms"""
@@ -93,7 +93,7 @@ func _generate_room_layout(room_count: int) -> Array:
 	
 	return layout
 
-func _create_room(room_id: int, position: Vector2, level: int) -> Room:
+func _create_room(room_id: int, position: Vector2, level: int) -> Node2D:
 	"""Create a room instance with the specified parameters"""
 	
 	# Select random room template for current biome
@@ -107,7 +107,7 @@ func _create_room(room_id: int, position: Vector2, level: int) -> Room:
 	# Try to load the template, fallback to basic room if it doesn't exist
 	if ResourceLoader.exists(template_path):
 		var room_scene = load(template_path)
-		var room = room_scene.instantiate() as Room
+		var room = room_scene.instantiate() as Node2D
 		room.position = position
 		room.room_id = room_id
 		room.biome = current_biome
@@ -115,10 +115,10 @@ func _create_room(room_id: int, position: Vector2, level: int) -> Room:
 	else:
 		return _create_basic_room(room_id, position, level)
 
-func _create_basic_room(room_id: int, position: Vector2, level: int) -> Room:
+func _create_basic_room(room_id: int, position: Vector2, level: int) -> Node2D:
 	"""Create a basic procedural room when templates aren't available"""
 	var room_scene = preload("res://scenes/rooms/BasicRoom.tscn")
-	var room = room_scene.instantiate() as Room
+	var room = room_scene.instantiate() as Node2D
 	
 	room.position = position
 	room.room_id = room_id

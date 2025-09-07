@@ -102,7 +102,7 @@ func _setup_dream_haze_particles():
 	material.color_ramp = gradient_texture
 	
 	# Wide emission area
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(1500, 800, 0)
 	
 	dream_haze_particles.process_material = material

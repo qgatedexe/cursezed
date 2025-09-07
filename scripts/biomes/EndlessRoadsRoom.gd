@@ -88,7 +88,7 @@ func _setup_dust_particles():
 	material.color_ramp = gradient_texture
 	
 	# Emission along the road
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(extended_width/2, 100, 0)
 	
 	dust_particles.process_material = material
@@ -262,12 +262,12 @@ func _update_mirage_effect(mirage_data: Dictionary, distance: float, delta: floa
 	mirage_node.modulate.a = mirage_data.color.a * opacity_factor
 	
 	# Add subtle floating motion
-	mirage_node.position.y = mirage_data.position.y + sin(Time.get_time_dict_from_system().second * 2.0) * 10.0
+	mirage_node.position.y = mirage_data.position.y + sin(Time.get_time_dict_from_unix(Time.get_unix_time_from_system())["second"] * 2.0) * 10.0
 
 func _update_wind_effects(delta):
 	"""Update wind-based effects"""
 	# Vary wind strength over time
-	wind_strength = 1.0 + sin(Time.get_time_dict_from_system().second * 0.3) * 0.5
+	wind_strength = 1.0 + sin(Time.get_time_dict_from_unix(Time.get_unix_time_from_system())["second"] * 0.3) * 0.5
 	
 	# Update dust particle emission based on wind
 	if dust_particles and dust_particles.process_material:

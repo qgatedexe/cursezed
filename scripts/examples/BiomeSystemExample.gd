@@ -84,12 +84,12 @@ func _demonstrate_biome_features():
 	_demonstrate_special_events()
 	
 	# Example 2: Show particle pool usage
-	await get_tree().create_timer(3.0).timeout
-	_demonstrate_particle_system()
+	var particle_timer = get_tree().create_timer(3.0)
+	particle_timer.timeout.connect(_demonstrate_particle_system)
 	
 	# Example 3: Show biome transitions
-	await get_tree().create_timer(3.0).timeout
-	_demonstrate_biome_transitions()
+	var transition_timer = get_tree().create_timer(6.0)
+	transition_timer.timeout.connect(_demonstrate_biome_transitions)
 
 func _demonstrate_special_events():
 	"""Show how to trigger biome-specific events"""
@@ -99,11 +99,11 @@ func _demonstrate_special_events():
 		# These would trigger different effects based on current biome
 		biome_controller.trigger_biome_special_event("spore_burst")
 		
-		await get_tree().create_timer(2.0).timeout
-		biome_controller.trigger_biome_special_event("wind_gust")
+		var wind_timer = get_tree().create_timer(2.0)
+		wind_timer.timeout.connect(func(): biome_controller.trigger_biome_special_event("wind_gust"))
 		
-		await get_tree().create_timer(2.0).timeout
-		biome_controller.trigger_biome_special_event("light_pulse")
+		var light_timer = get_tree().create_timer(4.0)
+		light_timer.timeout.connect(func(): biome_controller.trigger_biome_special_event("light_pulse"))
 
 func _demonstrate_particle_system():
 	"""Show how to use the particle pool system"""
@@ -118,12 +118,17 @@ func _demonstrate_particle_system():
 	var bubble_particles = particle_pool.get_particle_system("bubble", Vector2(300, 100))
 	
 	# Show pool statistics
-	await get_tree().create_timer(1.0).timeout
-	var stats = particle_pool.get_pool_stats()
-	print("Particle Pool Stats:")
-	for particle_type in stats:
-		var data = stats[particle_type]
-		print("  ", particle_type, ": ", data.active_count, "/", data.total_capacity, " (", data.utilization * 100, "% used)")
+	var stats_timer = get_tree().create_timer(1.0)
+	stats_timer.timeout.connect(_show_particle_stats)
+
+func _show_particle_stats():
+	"""Show particle pool statistics"""
+	if particle_pool:
+		var stats = particle_pool.get_pool_stats()
+		print("Particle Pool Stats:")
+		for particle_type in stats:
+			var data = stats[particle_type]
+			print("  ", particle_type, ": ", data.active_count, "/", data.total_capacity, " (", data.utilization * 100, "% used)")
 
 func _demonstrate_biome_transitions():
 	"""Show how to handle biome transitions"""

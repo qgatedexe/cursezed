@@ -81,7 +81,7 @@ func _setup_ash_particles():
 	material.color_ramp = gradient_texture
 	
 	# Emission
-	material.emission = Emission.EMISSION_BOX
+	material.emission = ParticleProcessMaterial.EMISSION_BOX
 	material.emission_box_extents = Vector3(1500, 100, 0)
 	
 	ash_particles.process_material = material
@@ -124,7 +124,7 @@ func _setup_ember_particles():
 	material.color_ramp = gradient_texture
 	
 	# Emission from specific points (near fires/sparks)
-	material.emission = Emission.EMISSION_POINT
+	material.emission = ParticleProcessMaterial.EMISSION_POINT
 	
 	ember_particles.process_material = material
 	ember_particles.amount = ember_count

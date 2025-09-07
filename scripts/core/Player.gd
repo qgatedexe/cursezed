@@ -150,8 +150,8 @@ func _perform_melee_attack():
 	melee_collision.disabled = false
 	
 	# Disable hitbox after brief moment
-	await get_tree().create_timer(0.1).timeout
-	melee_collision.disabled = true
+	var timer = get_tree().create_timer(0.1)
+	timer.timeout.connect(func(): melee_collision.disabled = true)
 	
 	print("Melee attack!")
 
@@ -202,8 +202,8 @@ func _damage_feedback():
 	"""Provide visual feedback when taking damage"""
 	# Flash red briefly
 	sprite.modulate = Color.RED
-	await get_tree().create_timer(0.1).timeout
-	sprite.modulate = Color.WHITE
+	var timer = get_tree().create_timer(0.1)
+	timer.timeout.connect(func(): sprite.modulate = Color.WHITE)
 
 func heal(amount: int):
 	"""Heal the player"""
