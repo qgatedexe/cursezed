@@ -8,7 +8,7 @@ signal player_died
 signal level_completed
 signal memory_fragments_changed(amount: int)
 
-@export var starting_biome: String = "Ashen Courtyard"
+@export var starting_biome: String = "Forgotten Forest"
 @export var max_health: int = 100
 
 var current_level: int = 1
@@ -21,6 +21,7 @@ var player: Player
 @onready var room_generator: RoomGenerator = $RoomGenerator
 @onready var ui_manager: UIManager = $UIManager
 @onready var camera_controller: CameraController = get_node("../CameraController")
+@onready var biome_controller: BiomeController = $BiomeController
 
 func _ready():
 	# Connect signals
@@ -121,3 +122,26 @@ func get_player_position() -> Vector2:
 	if player:
 		return player.global_position
 	return Vector2.ZERO
+
+func handle_room_transition(exit_data: Dictionary):
+	"""Handle room transition requests"""
+	print("Room transition requested: ", exit_data)
+	# This would integrate with the biome controller to handle transitions
+	if biome_controller:
+		# For now, just advance to next level
+		_on_level_completed()
+
+func transition_to_secret_area(destination: String):
+	"""Handle transition to secret areas (like mirage doors)"""
+	print("Transitioning to secret area: ", destination)
+	# This could load special secret rooms or areas
+
+func reveal_story_beat(story_beat: String):
+	"""Handle story revelation from memory shards"""
+	print("Story revealed: ", story_beat)
+	# This would integrate with a story/dialogue system
+
+func trigger_biome_event(event_name: String):
+	"""Trigger special biome events"""
+	if biome_controller:
+		biome_controller.trigger_biome_special_event(event_name)

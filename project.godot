@@ -22,6 +22,10 @@ window/size/viewport_height=1080
 window/size/mode=2
 window/stretch/mode="canvas_items"
 
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+
 [input]
 
 move_left={
@@ -62,9 +66,12 @@ ranged_attack={
 
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Enemies"
-2d_physics/layer_3="Environment"
-2d_physics/layer_4="Projectiles"
-2d_physics/layer_5="Pickups"
+2d_physics/layer_3="Terrain"
+2d_physics/layer_4="Hazards"
+2d_physics/layer_5="Climbable"
+2d_physics/layer_6="Interactive"
+2d_physics/layer_7="Projectiles"
+2d_physics/layer_8="Pickups"
 
 [physics]
 
